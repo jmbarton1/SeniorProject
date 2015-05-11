@@ -2,15 +2,11 @@ package mypackage;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import javax.swing.SwingUtilities;
-
 import mypackage.MainAppController.Model;
-//import mypackage.MainAppController.View;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.FXCollections;

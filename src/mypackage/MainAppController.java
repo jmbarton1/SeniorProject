@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.io.*;
-
 import javafx.stage.Stage.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -48,20 +47,8 @@ import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.event.*;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-
-
-
-
-
-
-
-
-
-
 import mypackage.MainApp;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -71,105 +58,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import javax.imageio.ImageIO;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import org.controlsfx.dialog.Dialogs;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-
 import java.awt.AlphaComposite;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
@@ -240,7 +137,6 @@ public class MainAppController {
 	private Model model;
 	
 	public boolean isDirectory;
-
 	
 	public MainAppController() {
 		selectedImages = new ArrayList<File>();
@@ -249,10 +145,7 @@ public class MainAppController {
 		xDimension = new TextField();
 		yDimension = new TextField();
 		ProgressBar = new ProgressBar();
-		model = new Model();
-		
-		
-		
+		model = new Model();	
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation", "static-access" })
@@ -311,7 +204,6 @@ public class MainAppController {
 			File selectedFolder = fc.showDialog(SelectImages.getScene().getWindow());
 			try{
 			File[] fileArray = selectedFolder.listFiles();
-			
 			String dNames = selectedFolder.toString();
 			for(final File files : fileArray){
 				selectedImages.add(files);
@@ -366,12 +258,10 @@ public class MainAppController {
 					else{
 						type = ".jpg";
 					}
-					
 					File[] files = new File[selectedImages.size()];
 					files = selectedImages.toArray(files);
 					System.out.println("selected Images Size: "+selectedImages.size());
 					System.out.println(" files: "+selectedImages.toString() + "x: "+xDimension.getText() + " y: "+yDimension.getText() + "type: "+type.toString());
-					
 					Converter c = new Converter(files, x,y,type);
 					ConverterThread thread1 = new ConverterThread(c);
 					thread1.start();
@@ -379,7 +269,8 @@ public class MainAppController {
 					new Thread((Runnable) model.worker).start();
 					final ReadOnlyObjectProperty<Worker.State> stateProperty = model.worker.stateProperty();
 					ProgressBar.progressProperty().bind(model.worker.progressProperty());
-					
+					Go.disableProperty().bind(
+							stateProperty.isNotEqualTo(Worker.State.READY));
 				}
 				}catch(NullPointerException e){
 					e.printStackTrace();
@@ -474,7 +365,6 @@ public class MainAppController {
 		VBox.setVgrow(TreeView, Priority.ALWAYS);
 		VBox.getChildren().addAll(TreeView);
 		BrowserPane.setContent(VBox); 
-		
 	}
 	   /***********************************************METHODS****************************************/
 	public void setMainApp(MainApp mainApp) {
@@ -523,8 +413,6 @@ public class MainAppController {
         }
         return imageView;
     }
-	
-	//classes
 	public class ConverterThread extends Thread{
 		Converter c1;
 		public ConverterThread(Converter c1){
@@ -574,6 +462,7 @@ public class MainAppController {
 			};
 			((Task<String>)worker).setOnSucceeded(event -> {
 				JOptionPane.showMessageDialog(null, "Conversion Complete");
+				
 			});
 			((Task<String>)worker).setOnFailed(event -> {
 				JOptionPane.showMessageDialog(null, "Conversion Failed");

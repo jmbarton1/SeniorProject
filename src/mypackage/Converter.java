@@ -33,9 +33,7 @@ public class Converter{
 					System.out.println("type: "+type);
 				} 
 				BufferedImage resize = resize(og,type);
-			
 				ImageIO.write(resize, "jpg", new File(newPictureName));
-				
 			}
 			return "Conversion Successful";
 		}catch(IOException ex){
